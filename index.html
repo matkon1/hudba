@@ -3,12 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hudba na pozadí</title>
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: sans-serif;
+    
+    }
+    .hint {
+      font-size: 20px;
+      text-align: center;
+    }
+  </style>
 </head>
 <body>
+ 
 
   <script>
-    const audio = new Audio('hudba.mp3');
+    const audio = new Audio('hudba.mp3'); // MP3 musí být ve stejném adresáři
     audio.loop = true;
     audio.preload = 'auto';
     let started = false;
@@ -17,15 +32,10 @@
       if (started) return;
       started = true;
       audio.play().catch(e => console.warn('Autoplay blokován', e));
-      // Odstraníme všechny listeners, aby už nečekaly na další akci
-      window.removeEventListener('pointerdown', startAudio);
-      window.removeEventListener('scroll', startAudio);
+      window.removeEventListener('mousemove', startAudio);
     }
 
-    // spustit po prvním pointerdown nebo scrollu
-    window.addEventListener('pointerdown', startAudio, {passive:true});
-    window.addEventListener('scroll', startAudio, {passive:true});
+    window.addEventListener('mousemove', startAudio, {passive:true});
   </script>
 </body>
-
 </html>
