@@ -3,27 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body {
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: sans-serif;
-    
-    }
-    .hint {
-      font-size: 20px;
-      text-align: center;
-    }
-  </style>
+  <title>Hudba na pozadí</title>
 </head>
 <body>
- 
+  <h1>Hudba se spustí okamžitì po první akci uživatele</h1>
+  <p>Kliknìte, dotknìte se nebo scrollujte pro pøehrání hudby.</p>
 
   <script>
-    const audio = new Audio('hudba.mp3'); // MP3 musÃ­ bÃ½t ve stejnÃ©m adresÃ¡Å™i
+    const audio = new Audio('hudba.mp3');
     audio.loop = true;
     audio.preload = 'auto';
     let started = false;
@@ -31,11 +18,15 @@
     function startAudio() {
       if (started) return;
       started = true;
-      audio.play().catch(e => console.warn('Autoplay blokovÃ¡n', e));
-      window.removeEventListener('mousemove', startAudio);
+      audio.play().catch(e => console.warn('Autoplay blokován', e));
+      // Odstraníme všechny listeners, aby už neèekaly na další akci
+      window.removeEventListener('pointerdown', startAudio);
+      window.removeEventListener('scroll', startAudio);
     }
 
-    window.addEventListener('mousemove', startAudio, {passive:true});
+    // spustit po prvním pointerdown nebo scrollu
+    window.addEventListener('pointerdown', startAudio, {passive:true});
+    window.addEventListener('scroll', startAudio, {passive:true});
   </script>
 </body>
 </html>
