@@ -3,11 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hudba na pozadí</title>
+  <title>Hudba na pozadÃ­</title>
 </head>
 <body>
-  <h1>Hudba se spustí okamitì po první akci uivatele</h1>
-  <p>Kliknìte, dotknìte se nebo scrollujte pro pøehrání hudby.</p>
 
   <script>
     const audio = new Audio('hudba.mp3');
@@ -18,15 +16,16 @@
     function startAudio() {
       if (started) return;
       started = true;
-      audio.play().catch(e => console.warn('Autoplay blokován', e));
-      // Odstraníme všechny listeners, aby u neèekaly na další akci
+      audio.play().catch(e => console.warn('Autoplay blokovÃ¡n', e));
+      // OdstranÃ­me vÅ¡echny listeners, aby uÅ¾ neÄekaly na dalÅ¡Ã­ akci
       window.removeEventListener('pointerdown', startAudio);
       window.removeEventListener('scroll', startAudio);
     }
 
-    // spustit po prvním pointerdown nebo scrollu
+    // spustit po prvnÃ­m pointerdown nebo scrollu
     window.addEventListener('pointerdown', startAudio, {passive:true});
     window.addEventListener('scroll', startAudio, {passive:true});
   </script>
 </body>
+
 </html>
