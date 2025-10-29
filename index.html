@@ -3,30 +3,63 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <title>Autoplay hudby s fade-in</title>
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: sans-serif;
+ 
+      text-align: center;
+    }
+    .hint {
+      font-size: 20px;
+      max-width: 400px;
+    }
+  </style>
 </head>
 <body>
 
 
   <script>
-    const audio = new Audio('hudba.mp3');
+    const audio = new Audio('hudba.mp3'); // MP3 musí být ve stejném adresáøi
     audio.loop = true;
     audio.preload = 'auto';
+    audio.volume = 0; // start tichý
     let started = false;
 
     function startAudio() {
       if (started) return;
       started = true;
-      audio.play().catch(e => console.warn('Autoplay blokovÃ¡n', e));
-      // OdstranÃ­me vÅ¡echny listeners, aby uÅ¾ neÄekaly na dalÅ¡Ã­ akci
+
+      audio.play().then(() => {
+        // Postupné zesílení (fade-in) bìhem 5 sekund
+        let vol = 0;
+        const interval = setInterval(() => {
+          vol += 0.02; // zvyš hlasitost po malých krocích
+          if (vol >= 1) {
+            vol = 1;
+            clearInterval(interval);
+          }
+          audio.volume = vol;
+        }, 100); // každých 100ms
+      }).catch(e => console.warn('Autoplay blokován', e));
+
+      // odstraníme listeners
       window.removeEventListener('pointerdown', startAudio);
+      window.removeEventListener('click', startAudio);
       window.removeEventListener('scroll', startAudio);
+      window.removeEventListener('mousemove', startAudio);
     }
 
-    // spustit po prvnÃ­m pointerdown nebo scrollu
+    // spustit po prvním pointerdown, click, scroll nebo pohybu myši
     window.addEventListener('pointerdown', startAudio, {passive:true});
+    window.addEventListener('click', startAudio, {passive:true});
     window.addEventListener('scroll', startAudio, {passive:true});
+    window.addEventListener('mousemove', startAudio, {passive:true});
   </script>
 </body>
-
 </html>
